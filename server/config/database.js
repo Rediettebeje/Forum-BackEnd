@@ -1,19 +1,14 @@
 const mySqul = require("mysql2");
 
-const pool = mySqul.createPool({
-  user: process.env.DB_USER,
-  password: process.env.DB_PASS,
-  host: process.env.DB_HOST,
-  database: process.env.MYSQL_DB,
-  connectionLimit: 10
-});
+// const pool = mySqul.createPool({
+//   user: process.env.DB_USER,
+//   password: process.env.DB_PASS,
+//   host: process.env.DB_HOST,
+//   database: process.env.MYSQL_DB,
+//   connectionLimit: 10
+// });
 
-pool.getConnection(function (err, connection) {
-  if (err) {
-    console.error('Error connecting to the database:', err);
-    return;
-  }
-  console.log("Database Connected");
+const  pool= mySqul.createConnection(process.env.DATABASE_URL)
 
   // Create tables
   const registration = `CREATE TABLE IF NOT EXISTS registration (
@@ -29,8 +24,8 @@ pool.getConnection(function (err, connection) {
     user_id int(11) not null,
     first_name TEXT not null,
     last_name TEXT not null,
-    PRIMARY KEY (user_profile_id),
-    FOREIGN KEY (user_id) REFERENCES registration(user_id)
+    PRIMARY KEY (user_profile_id)
+   
   )`;
    let questions = `CREATE TABLE if not exists questions(
     question_id int auto_increment,
@@ -41,8 +36,7 @@ pool.getConnection(function (err, connection) {
     post_id varchar(255) not null,
     user_id int not null,
     PRIMARY KEY (question_id),
-    UNIQUE KEY (post_id),
-    FOREIGN KEY (user_id) REFERENCES registration (user_id)
+    UNIQUE KEY (post_id)
     )`;
 let answers = `CREATE TABLE if not exists answers(
     answer_id int auto_increment,
@@ -50,9 +44,7 @@ let answers = `CREATE TABLE if not exists answers(
     answer_code_block varchar(255) ,
     user_id int not null,
     question_id int not null,
-    PRIMARY KEY (answer_id),
-    FOREIGN KEY (user_id) REFERENCES registration (user_id),
-    FOREIGN KEY (question_id) REFERENCES questions (question_id)
+    PRIMARY KEY (answer_id)
     )`;
 
   pool.query(registration, (err, results) => {
@@ -77,26 +69,26 @@ let answers = `CREATE TABLE if not exists answers(
   });
 
 // After creating tables, let's delete rows from "answers" table first
-const deleteAnswers = `DELETE FROM answers WHERE question_id IN (1, 2, 3)`;
+// const deleteAnswers = `DELETE FROM answers WHERE question_id IN (1, 2, 3)`;
 
-pool.query(deleteAnswers, (err, results) => {
-  if (err) {
-    console.log(err);
-    return;
-  }
-  console.log(`${results.affectedRows} rows deleted from answers table`);
+// pool.query(deleteAnswers, (err, results) => {
+//   if (err) {
+//     console.log(err);
+//     return;
+//   }
+//   console.log(`${results.affectedRows} rows deleted from answers table`);
 
-  // Now, let's delete rows from "questions" table
-  const deleteQuestions = `DELETE FROM questions WHERE question_id IN (1, 2, 3)`;
+//   // Now, let's delete rows from "questions" table
+//   const deleteQuestions = `DELETE FROM questions WHERE question_id IN (1, 2, 3)`;
 
-  pool.query(deleteQuestions, (err, results) => {
-    if (err) {
-      console.log(err);
-      return;
-    }
-    console.log(`${results.affectedRows} rows deleted from questions table`);
-  });
-});
+//   pool.query(deleteQuestions, (err, results) => {
+//     if (err) {
+//       console.log(err);
+//       return;
+//     }
+//     console.log(`${results.affectedRows} rows deleted from questions table`);
+//   });
+// });
 
 
   // Execute the ALTER TABLE statement to change the column name
@@ -111,6 +103,10 @@ pool.query(deleteAnswers, (err, results) => {
   //   // Close the database connection
   //   connection.release();
   // });
-});
+
 
 module.exports = pool;
+
+
+// pscale_pw_RKgKGreTGqJWIE9ae1Qr5xZ7ldyZUh9HeSAsutcBT44
+// y7pqfe5xggvo9r01feor
