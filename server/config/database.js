@@ -101,5 +101,3 @@ let answers = `CREATE TABLE if not exists answers(
 module.exports = pool;
 
 
-// pscale_pw_RKgKGreTGqJWIE9ae1Qr5xZ7ldyZUh9HeSAsutcBT44
-// y7pqfe5xggvo9r01feor
